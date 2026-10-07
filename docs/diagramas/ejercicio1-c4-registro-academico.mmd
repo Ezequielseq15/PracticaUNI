@@ -1,0 +1,9 @@
+C4Context
+title Integración con Registro Académico
+
+Person(estudiante, "Estudiante", "Usuario")
+System(uni, "Sistema de Gestión de Proyectos de Graduación UNI", "Gestiona proyectos")
+System_Ext(registro, "Sistema de Registro Académico", "Datos académicos")
+
+Rel(estudiante, uni, "Gestiona proyecto")
+Rel(uni, registro, "Consulta datos académicos", "HTTPS/JSON")

@@ -1,0 +1,28 @@
+C4Container
+title Sistema de Gestión de Proyectos de Graduación UNI - Contenedores
+
+Person(estudiante, "Estudiante", "Usuario académico")
+Person(tutor, "Tutor", "Docente tutor")
+Person(coordinador, "Coordinador", "Responsable académico")
+
+System_Boundary(uni, "Sistema de Gestión de Proyectos de Graduación UNI") {
+    Container(web, "Aplicación Web", "React / Angular / JavaScript",
+              "Interfaz para estudiantes, tutores y coordinadores")
+    Container(api, "API REST", "ASP.NET Core Web API / C#",
+              "Autenticación, reglas de negocio y servicios HTTP")
+    ContainerDb(db, "Base de Datos", "SQL Server",
+                "Usuarios, proyectos, revisiones, estados y catálogos")
+    Container(files, "Gestor de Documentos", "Almacenamiento de objetos",
+              "Documentos de propuestas, avances y defensa")
+}
+
+System_Ext(email, "Correo institucional", "SMTP / proveedor de correo")
+
+Rel(estudiante, web, "Usa", "HTTPS")
+Rel(tutor, web, "Usa", "HTTPS")
+Rel(coordinador, web, "Usa", "HTTPS")
+
+Rel(web, api, "Consume API REST", "HTTPS/JSON")
+Rel(api, db, "Lee y escribe", "EF Core / SQL")
+Rel(api, files, "Sube y recupera documentos", "HTTPS")
+Rel(api, email, "Envía notificaciones", "SMTP/API")

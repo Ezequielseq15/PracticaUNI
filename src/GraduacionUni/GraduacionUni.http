@@ -1,0 +1,59 @@
+### Variables (cambie el puerto por el que muestre "dotnet run")
+@host = https://localhost:7080
+
+### 1) Login como estudiante (guarde el token en la variable de abajo)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "estudiante@uni.edu.ni",
+  "password": "Uni2026*Dev"
+}
+
+### Pegue aquí el token recibido
+@token = PEGUE_AQUI_EL_TOKEN
+
+### 2) Mis proyectos
+GET {{host}}/api/projects/mine
+Authorization: Bearer {{token}}
+
+### 3) Registrar propuesta (estudiante)
+POST {{host}}/api/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Plataforma de seguimiento de proyectos de graduación",
+  "description": "Aplicación web para registrar y dar seguimiento a proyectos."
+}
+
+### 4) Consultar proyecto
+GET {{host}}/api/projects/1
+Authorization: Bearer {{token}}
+
+### 5) Revisión (haga login como tutor@uni.edu.ni y use su token)
+POST {{host}}/api/projects/1/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "comments": "Definir mejor el alcance y los objetivos específicos."
+}
+
+### 6) Cambiar estado (haga login como coordinador@uni.edu.ni)
+PATCH {{host}}/api/projects/1/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "Revision"
+}
+
+### 7) Asignar tutor (coordinador)
+PATCH {{host}}/api/projects/2/tutor
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tutorId": 2
+}

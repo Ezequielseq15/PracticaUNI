@@ -1,0 +1,14 @@
+C4Container
+title Contenedores con notificaciones
+
+Person(coordinador, "Coordinador")
+System_Boundary(uni, "Sistema UNI") {
+  Container(web, "Aplicación Web", "React", "Interfaz")
+  Container(api, "API REST", "ASP.NET Core", "Servicios y reglas")
+  ContainerDb(db, "SQL Server", "SQL Server", "Datos")
+  Container(notify, "Servicio de Notificaciones", "C# / SMTP", "Mensajes")
+}
+Rel(coordinador, web, "Usa", "HTTPS")
+Rel(web, api, "Consume", "HTTPS/JSON")
+Rel(api, db, "Consulta", "EF Core")
+Rel(api, notify, "Solicita notificación", "HTTPS/SMTP")

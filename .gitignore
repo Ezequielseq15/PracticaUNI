@@ -1,0 +1,19 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.log
+
+# Secretos y archivos locales (NUNCA subir)
+appsettings.Local.json
+secrets.json
+.env
+
+# Documentos subidos durante las pruebas
+src/GraduacionUni/storage/
+
+# Exportaciones locales
+*.zip

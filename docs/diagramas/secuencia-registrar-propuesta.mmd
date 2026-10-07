@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    actor E as Estudiante
+    participant W as Aplicación Web
+    participant A as API REST
+    participant V as Validación de DTO
+    participant DB as SQL Server
+    participant F as Gestor de Documentos
+
+    E->>W: Completa formulario de propuesta
+    W->>A: POST /api/projects (Bearer token)
+    activate A
+    A->>V: Validar DTO y reglas
+    alt Datos inválidos
+        V-->>A: Errores de validación
+        A-->>W: 400 Bad Request
+        W-->>E: Mostrar errores
+    else Datos válidos
+        V-->>A: Datos válidos
+        A->>DB: Crear proyecto (estado Propuesta)
+        DB-->>A: Id del proyecto
+        A-->>W: 201 Created + proyecto
+    end
+    deactivate A
+    W-->>E: Mostrar número de proyecto
+
+    E->>W: Adjunta documento de la propuesta
+    W->>A: POST /api/projects/{id}/documents (multipart)
+    activate A
+    A->>F: Guardar archivo
+    F-->>A: Nombre almacenado
+    A->>DB: Asociar documento al proyecto
+    DB-->>A: Confirmación
+    A-->>W: 201 Created + metadatos del documento
+    deactivate A
+    W-->>E: Mostrar documento adjunto

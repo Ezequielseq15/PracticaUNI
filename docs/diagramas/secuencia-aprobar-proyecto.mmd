@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    actor C as Coordinador
+    participant W as Web
+    participant A as API
+    participant DB as SQL Server
+    participant N as Notificaciones
+
+    C->>W: Selecciona proyecto
+    W->>A: PATCH /api/projects/{id}/status
+    A->>DB: Validar proyecto y permisos
+    DB-->>A: Datos válidos
+    A->>DB: Actualizar estado = Aprobada
+    DB-->>A: Confirmación
+    A->>N: Notificar aprobación
+    N-->>A: Aceptado
+    A-->>W: 200 OK
+    W-->>C: Mostrar estado Aprobada

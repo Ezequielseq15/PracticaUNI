@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    actor E as Estudiante
+    participant W as Aplicación Web
+    participant A as API REST
+    participant DB as SQL Server
+
+    E->>W: Ingresa correo y contraseña
+    W->>A: POST /api/auth/login
+    activate A
+    A->>DB: Buscar usuario por correo
+    DB-->>A: Usuario + hash + rol
+    A->>A: Verificar contraseña
+    alt Credenciales válidas
+        A-->>W: 200 OK + token + datos del usuario
+        W-->>E: Mostrar panel principal
+        E->>W: Solicitar mis proyectos
+        W->>A: GET /api/projects/mine (Bearer token)
+        A->>DB: Consultar proyectos del estudiante
+        DB-->>A: Lista de proyectos
+        A-->>W: 200 OK + JSON
+        W-->>E: Mostrar proyectos
+    else Credenciales inválidas
+        A-->>W: 401 Unauthorized
+        W-->>E: Mostrar mensaje de autenticación
+    end
+    deactivate A

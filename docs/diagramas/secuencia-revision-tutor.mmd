@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor T as Tutor
+    participant W as Aplicación Web
+    participant A as API REST
+    participant DB as SQL Server
+    participant M as Servicio de correo
+
+    T->>W: Abre proyecto asignado
+    W->>A: GET /api/projects/{id} (Bearer token)
+    A->>DB: Consultar proyecto y documentos
+    DB-->>A: Información del proyecto
+    A-->>W: 200 OK + JSON
+    W-->>T: Mostrar proyecto
+
+    T->>W: Registra observaciones
+    W->>A: POST /api/projects/{id}/reviews
+    A->>DB: Guardar revisión
+    DB-->>A: Revisión registrada
+    A->>M: Notificar al estudiante
+    M-->>A: Envío aceptado
+    A-->>W: 201 Created
+    W-->>T: Mostrar confirmación
