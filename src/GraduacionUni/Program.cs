@@ -19,9 +19,20 @@ var jwtSection = builder.Configuration.GetSection(JwtOptions.SectionName);
 var jwt = jwtSection.Get<JwtOptions>() ?? new JwtOptions();
 
 if (string.IsNullOrWhiteSpace(jwt.Key) || jwt.Key.Length < 32)
-    throw new InvalidOperationException(
-        "Falta la clave JWT (Jwt:Key, mínimo 32 caracteres). " +
-        "Configúrela con: dotnet user-secrets set \"Jwt:Key\" \"<clave-larga-aleatoria>\"");
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        const string developmentJwtKey = "DevelopmentJwtKey_2026_ABCDEF1234567890";
+        jwtSection["Key"] = developmentJwtKey;
+        jwt.Key = developmentJwtKey;
+    }
+    else
+    {
+        throw new InvalidOperationException(
+            "Falta la clave JWT (Jwt:Key, mínimo 32 caracteres). " +
+            "Configúrela con: dotnet user-secrets set \"Jwt:Key\" \"<clave-larga-aleatoria>\"");
+    }
+}
 
 if (string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("DefaultConnection")))
     throw new InvalidOperationException(
@@ -34,7 +45,7 @@ builder.Services.AddProblemDetails();
 builder.Services.Configure<JwtOptions>(jwtSection);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -123,9 +134,9 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();

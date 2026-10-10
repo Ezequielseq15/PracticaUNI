@@ -2,7 +2,6 @@
    Sistema de Gestión de Proyectos de Graduación UNI
    Script SQL Server (sección 12 de la guía, ampliado con Reviews y
    ProjectDocuments para soportar los endpoints del README).
-   Se puede ejecutar varias veces: solo crea lo que no existe.
    ===================================================================== */
 
 IF DB_ID(N'GraduacionUNI') IS NULL
@@ -85,3 +84,7 @@ GO
 
 /* Los usuarios de prueba NO se insertan aquí: sus contraseñas deben guardarse
    con hash (PasswordHasher de ASP.NET Core). La API los crea sola en Development. */
+
+
+   SELECT Id, Title, Status, StudentId, TutorId FROM Projects;
+   SELECT Email, PasswordHash FROM Users;

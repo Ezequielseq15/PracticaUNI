@@ -126,6 +126,7 @@ dotnet run --launch-profile https
 
 **Resultado esperado:** la consola muestra `Now listening on: https://localhost:7080` y se abre el navegador en
 `https://localhost:7080/swagger`. En el primer arranque se crean los 4 usuarios de prueba y un proyecto de ejemplo.
+En desarrollo también puedes abrir `http://localhost:5080/swagger`; las solicitudes HTTP no se redirigen a HTTPS.
 
 | Usuario | Rol | Contraseña (solo desarrollo) |
 |---|---|---|
